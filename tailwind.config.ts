@@ -6,6 +6,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+	"./src/_components/**/*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
   	extend: {
@@ -21,11 +22,11 @@ const config: Config = {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
+  				DEFAULT: '#875bf9',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {
-  				DEFAULT: 'hsl(var(--secondary))',
+  				DEFAULT: '#ee46bd',
   				foreground: 'hsl(var(--secondary-foreground))'
   			},
   			muted: {
