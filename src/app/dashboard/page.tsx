@@ -1,8 +1,12 @@
-import React from 'react'
 
+import AddCourseHeader from '@/_components/AddCourseHeader/AddCourseHeader'
+import React from 'react'
 const page = () => {
+
   return (
-    <div>page</div>
+    <div>
+      <AddCourseHeader />
+    </div>
   )
 }
 
