@@ -7,6 +7,7 @@ import Step1 from './_shared/Step1/Step1'
 import Step2 from './_shared/Step2/Step2'
 import run from '@/config/AIModel'
 import Step3 from './_shared/Step3/Step3'
+import { CustomAlertDialog as AlertDialog } from '../AlertDialog/AlertDialog'
 const courseDetail: { [key: string]: string | React.ReactElement }[] = [
     { title: 'Category', description: 'Add course details', icon: <Codesandbox /> },
     { title: 'Topic & Desc', description: 'Add course content', icon: <Lightbulb /> },
@@ -15,6 +16,7 @@ const courseDetail: { [key: string]: string | React.ReactElement }[] = [
 ]
 const Stepper = () => {
     const [activeTab, setActiveTab] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [selectData, setSelectedData] = useState({
         selectedCategory: '',
         selectedTopic: {
@@ -87,25 +89,35 @@ const Stepper = () => {
                             onClick={() => {
                                 setActiveTab(prev => prev + 1)
                             }}
-                            disabled={activeTab == courseDetail.length - 1}
+                            disabled={activeTab == courseDetail.length - 1 || activeTab === 0 && selectData.selectedCategory === '' || activeTab === 1 && (selectData.selectedTopic.title === '' || selectData.selectedTopic.description === '')}
                         >Next</Button> :
                         <Button
                             onClick={async () => {
-                                const res = await run({
-                                    category: selectData.selectedCategory,
-                                    topic: selectData.selectedTopic.title,
-                                    description: selectData.selectedTopic.description,
-                                    level: selectData.options.difficultyLevel.value,
-                                    duration: selectData.options.duration,
-                                    noOfChapters: selectData.options.noOfChapters,
-                                    referencedVideo: selectData.options.referencedVideo.value
+                                try {
+                                    setLoading(true)
+                                    const res = await run({
+                                        category: selectData.selectedCategory,
+                                        topic: selectData.selectedTopic.title,
+                                        description: selectData.selectedTopic.description,
+                                        level: selectData.options.difficultyLevel.value,
+                                        duration: selectData.options.duration,
+                                        noOfChapters: selectData.options.noOfChapters,
+                                        referencedVideo: selectData.options.referencedVideo.value
 
 
-                                })
-                                const data =res;
-                                console.log(data)
-                                console.log(JSON.parse(data))   
+                                    })
+                                    const data = res;
+                                    console.log(data)
+                                    console.log(JSON.parse(data))
+                                    setLoading(false)
+                                } catch (error) {
+                                    setLoading(false)
+                                }
+
                             }}
+                            disabled={
+                                activeTab === 2 && (selectData.options.difficultyLevel.value === "Please Select" || selectData.options.duration === 0 || selectData.options.noOfChapters === 0 || selectData.options.referencedVideo.value === "Please Select")
+                            }
 
                         >
                             Generate Course
@@ -114,6 +126,8 @@ const Stepper = () => {
 
 
             </div>
+            <AlertDialog loading={loading} text='Wait AI Generating the course' />
+
         </div>
     )
 }

@@ -44,7 +44,7 @@ const Step3: React.FC<StepProps> = ({ selectedData, setSelectedData }) => {
                 />
             </div>
             <div className="flex w-[60%] flex-wrap justify-between items-center">
-                <InputBox placeholder='No of Hourse' value={selectedData.options.duration} label={"⏲️ Duration"}
+                <InputBox placeholder='No of Hours' value={selectedData.options.duration} label={"⏲️ Duration (In Hours)"}
                     onChange={(e) => setSelectedData({
                         ...selectedData,
                         options: {
@@ -80,7 +80,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({ label, options, selec
             <label htmlFor="select" className="block text-lg font-normal">
                 {label}
             </label>
-            <div className='mt-1.5 w-[196px] md:w-full rounded-lg border border-gray-300'>
+            <div className='mt-1.5 w-[196px] md:w-[196px] rounded-lg border border-gray-300'>
                 <select
                     name="select"
                     id="select"
