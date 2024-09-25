@@ -1,7 +1,7 @@
 
 import { serial, varchar, text, pgTable, pgSchema } from "drizzle-orm/pg-core";
 export const mySchema = pgSchema("CourseSchema");
-export const mySchemaUsers = pgTable('CourseSchema', {
+export const CourseSchema = pgTable('CourseSchema', {
     id: serial('id').primaryKey(),
     courseId: varchar('courseId').notNull(),
     name: varchar('name').notNull(),

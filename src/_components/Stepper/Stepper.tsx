@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react'
-
+import uuid4 from 'uuid4'
+import { useUser } from '@clerk/nextjs'
 import { Lightbulb, Codesandbox, SquareMenu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Step1 from './_shared/Step1/Step1'
@@ -8,6 +9,9 @@ import Step2 from './_shared/Step2/Step2'
 import run from '@/config/AIModel'
 import Step3 from './_shared/Step3/Step3'
 import { CustomAlertDialog as AlertDialog } from '../AlertDialog/AlertDialog'
+import { db } from '@/config/db/db'
+import { CourseSchema } from '@/config/db/schemas/CourseSchema'
+import { useRouter } from 'next/navigation'
 const courseDetail: { [key: string]: string | React.ReactElement }[] = [
     { title: 'Category', description: 'Add course details', icon: <Codesandbox /> },
     { title: 'Topic & Desc', description: 'Add course content', icon: <Lightbulb /> },
@@ -15,8 +19,34 @@ const courseDetail: { [key: string]: string | React.ReactElement }[] = [
     { title: 'Options', description: 'Set course pricing', icon: <SquareMenu /> },
 ]
 const Stepper = () => {
+    const { user } = useUser();
     const [activeTab, setActiveTab] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [course, setCourse] = useState();
+    const router = useRouter();
+    let id = uuid4();
+
+
+    const saveCourseLayoutInDB = async (data: any) => {
+
+        const res = await db.insert(CourseSchema).values({
+            //@ts-ignore
+            courseId: id,
+            name: data["Course_Name"] || data["Course Name"],
+            level: data.Level,
+            courseOutput: data,
+            category: data?.Category || selectData.selectedCategory,
+            duration: String(data?.Duration),
+            noOfChapters: String(data?.Chapters?.length || 0),
+            createdBy: user?.primaryEmailAddress?.emailAddress,
+            userName: user?.fullName,
+            userEmail: user?.primaryEmailAddress?.emailAddress,
+            UserProfileImage: user?.imageUrl
+
+        })
+        console.log("Finish")
+
+    }
     const [selectData, setSelectedData] = useState({
         selectedCategory: '',
         selectedTopic: {
@@ -107,9 +137,11 @@ const Stepper = () => {
 
                                     })
                                     const data = res;
-                                    console.log(data)
+                                    setCourse(JSON.parse(data))
                                     console.log(JSON.parse(data))
+                                    saveCourseLayoutInDB(JSON.parse(data));
                                     setLoading(false)
+                                    router.replace("/create-course" + id)
                                 } catch (error) {
                                     setLoading(false)
                                 }

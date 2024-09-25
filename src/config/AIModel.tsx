@@ -21,7 +21,7 @@ const generationConfig = {
     temperature: 1,
     topP: 0.95,
     topK: 64,
-    maxOutputTokens: 8192,
+    maxOutputTokens: 10000,
     responseMimeType: "application/json",
 };
 
@@ -42,7 +42,7 @@ async function run({ category, topic, level, duration, noOfChapters, description
         ],
     });
 
-    const result = await chatSession.sendMessage(`Generate A Course Tutorial on Following Detail With field as Course Name, Description, Along with Chapter Name, about, Duration: Category: '${category}', Topic: ${topic}, Level:${level}, Duration: ${duration}Iin JSON format\n`);
+    const result = await chatSession.sendMessage(`Generate A Course Tutorial on Following Detail With field as Course Name, Description, Along with Chapter_Name, about, Duration: Category: '${category}', Topic: ${topic}, Level:${level}, Duration: ${duration} ,Chapters:${noOfChapters} make sure chapters number equal to ${noOfChapters} and return all these fields same as " Course_Name, Level, Category, Duration, Chapters " Iin JSON format \n`);
 
     return result?.response.text();
 }
