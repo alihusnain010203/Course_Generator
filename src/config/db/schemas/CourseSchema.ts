@@ -8,6 +8,8 @@ export const CourseSchema = pgTable('CourseSchema', {
     category: varchar('category').notNull(),
     level: varchar('level').notNull(), 
     courseOutput: text('courseOutput').notNull(),
+    description: text('description').notNull(),
+    referencedVideo: varchar('referencedVideo').notNull().default('Yes'),
     noOfChapters: varchar('noOfChapters').notNull(),
     duration: varchar('duration').notNull(),
     createdBy: varchar('createdBy').notNull(),

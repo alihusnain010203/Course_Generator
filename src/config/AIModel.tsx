@@ -42,7 +42,7 @@ async function run({ category, topic, level, duration, noOfChapters, description
         ],
     });
 
-    const result = await chatSession.sendMessage(`Generate A Course Tutorial on Following Detail With field as Course Name, Description, Along with Chapter_Name, about, Duration: Category: '${category}', Topic: ${topic}, Level:${level}, Duration: ${duration} ,Chapters:${noOfChapters} make sure chapters number equal to ${noOfChapters} and return all these fields same as " Course_Name, Level, Category, Duration, Chapters " Iin JSON format \n`);
+    const result = await chatSession.sendMessage(`Generate A Course Tutorial on Following Detail With field as Course Name, Description, Along with Chapter_Name, about, Duration: Category: '${category}', Topic: ${topic}, Level:${level}, Duration: ${duration} ,Chapters:${noOfChapters} make sure chapters number equal to ${noOfChapters} and each chapter contains description (max 15-words) and duration of chapter and return all these fields same as " Course_Name, Level, Category,Description, Duration, Chapters " Iin JSON format \n`);
 
     return result?.response.text();
 }

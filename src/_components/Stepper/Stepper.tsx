@@ -35,6 +35,8 @@ const Stepper = () => {
             name: data["Course_Name"] || data["Course Name"],
             level: data.Level,
             courseOutput: data,
+            description: data.Description,
+            referencedVideo: data.referencedVideo || selectData.options.referencedVideo.value,
             category: data?.Category || selectData.selectedCategory,
             duration: String(data?.Duration),
             noOfChapters: String(data?.Chapters?.length || 0),
@@ -44,7 +46,7 @@ const Stepper = () => {
             UserProfileImage: user?.imageUrl
 
         })
-        console.log("Finish")
+       
 
     }
     const [selectData, setSelectedData] = useState({
@@ -138,10 +140,10 @@ const Stepper = () => {
                                     })
                                     const data = res;
                                     setCourse(JSON.parse(data))
-                                    console.log(JSON.parse(data))
+                                  
                                     saveCourseLayoutInDB(JSON.parse(data));
                                     setLoading(false)
-                                    router.replace("/create-course" + id)
+                                    router.replace("/create-course/" + id)
                                 } catch (error) {
                                     setLoading(false)
                                 }

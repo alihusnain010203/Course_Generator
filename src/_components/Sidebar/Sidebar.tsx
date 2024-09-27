@@ -27,7 +27,7 @@ const Links: { icon: React.ReactElement; heading: string; path: string }[] = [
 const Sidebar = () => {
     const pathname = usePathname();
     const [activeTab, setActiveTab] = useState("/dashboard")
-    console.log(pathname)
+
     useEffect(() => {
         setActiveTab(pathname)
 
@@ -48,7 +48,7 @@ const Sidebar = () => {
                     {/* SideBar Footer */}
 
                 </div>
-                 <div className='absolute left-0 bottom-0 p-4 flex gap-1 flex-col'>
+                <div className='absolute left-0 bottom-0 p-4 flex gap-1 flex-col'>
                     <Progress className='text-primary' value={20} />
                     <p className=' font-medium text-gray-500'>Course 5 out of 5</p>
                     <p className='text-xs font-bold text-primary'>Upgrade For Unlimited Genration</p>
