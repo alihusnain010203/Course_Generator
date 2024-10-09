@@ -1,11 +1,13 @@
 import { CircleChevronDown, Clock1 } from 'lucide-react';
 import React from 'react'
 
-const ChapterSection = ({ chapters }:
-    { chapters: { Chapter_Name: string, about: string, Duration: number }[] }
+
+
+
+const ChapterSection = ({ chapters = [] }:
+    { chapters?: { Chapter_Name: string, about: string, Duration: number }[] }
 ) => {
     const [chap, setChapters] = React.useState(chapters)
-    // {\"Chapter_Name\":\"Introduction to Advanced Physiotherapy\",\"about\":\"Overview of advanced physiotherapy principles and their application in clinical practice.\",\"Duration\":1}
     return (
         <div className='mb-2'>
             <h1 className='text-xl font-semibold'>Chapters</h1>
@@ -19,6 +21,7 @@ const ChapterSection = ({ chapters }:
                             ChapterDesc={chapter.about}
                             Duration={chapter.Duration + ' hours'}
                             index={index + 1}
+                            key={index}
                         />
                     )
                 })
@@ -53,15 +56,15 @@ const ChapterHolder: React.FC<ChapterHolderProps> = ({
                 <h1 className='text-lg font-semibold'>{chapterHeading}</h1>
                 <p className='text-gray-500'>{ChapterDesc}</p>
                 {/* duration */}
-    
+
                 <p className='text-primary flex gap-1 font-semibold items-center'> <Clock1 />   {Duration}</p>
             </div>
             {/* Arrow */}
             <div className='flex-grow flex items-end text-gray-300 md:items-start justify-end'>
                 <CircleChevronDown />
-                </div>
+            </div>
 
-            
+
         </div>
     );
 }

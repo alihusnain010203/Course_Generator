@@ -3,10 +3,10 @@ import React from 'react'
 
 
 interface BasicCourseInfoProps {
-    level: string;
-    duration: string;
-    noOfChapters: string;
-    referencedVideo: string;
+    level?: string;
+    duration?: string;
+    noOfChapters?: string;
+    referencedVideo?: string;
 }
 
 const CourseDetail: React.FC<BasicCourseInfoProps> =({
