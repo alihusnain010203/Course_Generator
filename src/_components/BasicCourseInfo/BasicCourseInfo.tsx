@@ -18,7 +18,7 @@ const BasicCourseInfo: React.FC<BasicCourseInfoProps> = ({
 }) => {
     return (
 
-        <div className=' border-gray-300 border-2 rounded-md p-3 '>
+        <div className=' border-gray-200 border-2 rounded-md p-3 '>
             <div className='flex justify-between p-3 gap-10 flex-col-reverse md:flex-row'>
                 {/* Name & Description */}
                 <div className='flex flex-1 flex-col gap-4'>
@@ -28,8 +28,15 @@ const BasicCourseInfo: React.FC<BasicCourseInfoProps> = ({
                     <Button className='mt-5'>Start</Button>
                 </div>
                 {/* Image */}
-                <div className='flex flex-1 justify-center md:justify-end'>
-                    <Image src={UserProfileImage} alt='User Profile' className=' rounded-full' width={300} height={300} />
+                <div className='flex flex-1 justify-center md:justify-end relative'>
+                    <Image src={UserProfileImage} alt='User Profile' className=' rounded-md' width={300} height={300} />
+                    {/* Overlay On Image */}
+                    <div className='absolute top-0 md:right-0 w-[300px] h-[300px] bg-black bg-opacity-50 rounded-md'>
+                        {/* Upload Image Heading In center */}
+                        <div className='flex justify-center items-center h-full'>
+                            <h1 className='text-2xl text-white'>Upload Course Image</h1>
+                            </div>
+                    </div>
                 </div>
             </div>
         </div>

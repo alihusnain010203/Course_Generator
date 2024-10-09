@@ -16,7 +16,7 @@ const CourseDetail: React.FC<BasicCourseInfoProps> =({
     referencedVideo,
 }) => {
   return (
-    <div className=' border-gray-300 border-2 rounded-md p-3 mt-4 mb-4'>
+    <div className=' border-gray-200 border-2 rounded-md p-3 mt-4 mb-4'>
         <div className='flex justify-center md:justify-evenly gap-6 md:gap-3 md:items-center flex-col md:flex-row flex-wrap'>
             <div className='flex items-center gap-3'>
                 <LineChart className=' text-primary' size={"30px"} />

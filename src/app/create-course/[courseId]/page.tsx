@@ -7,6 +7,7 @@ import { and, eq } from 'drizzle-orm'
 import { useUser } from '@clerk/nextjs'
 import BasicCourseInfo from '@/_components/BasicCourseInfo/BasicCourseInfo'
 import CourseDetail from '@/_components/CourseDetail/CourseDetail'
+import ChapterSection from '@/_components/ChaptersSection/ChapterSection'
 const page = () => {
   const pathname = usePathname()
   const { user } = useUser();
@@ -49,7 +50,7 @@ const page = () => {
 
   return (
     <div className='flex justify-center items-center'>
-      <div className='mt-10 px-7 md:px-20 lg:px-44 w-full max-w-[1280px]'>
+      <div className='mt-10 flex flex-col gap-[20px] px-7 md:px-20 lg:px-44 w-full max-w-[1280px]'>
         <h2 className='text-center font-bold text-2xl text-black'>Course Layout</h2>
         <BasicCourseInfo
 
@@ -65,7 +66,9 @@ const page = () => {
           noOfChapters={course.noOfChapters}
           referencedVideo={course.referencedVideo}
         />
-        {/* <ChapterList chapters={course.courseOutput.Chapters} /> */}
+        <ChapterSection
+          chapters={JSON.parse(course.courseOutput).Chapters}
+        />
 
       </div>
     </div>
