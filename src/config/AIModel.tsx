@@ -60,9 +60,27 @@ export async function generateChaptersContent(
     });
 
     const result = await chatSession.sendMessage(
-        `Generate a detail content about this topic ${chapterName} of this course ${courseName} and here is the description ${Description}.Provide also a refernced Youtube Video please try to attach video with this duration ${duration} and refernced coding example(if applicable or course related to programming) wrap code exanple in precode tag.Send Data in JSON format each topic in chapter have title or description and precode if if code is available . Make sure Youtube video link is 100% active or right.`
-    )
+        `Generate a detail content about this topic ${chapterName} of this course ${courseName} and here is the description ${Description} with this Duration ${duration}.Chapter consist of arrays of topics with each topic having a name, description, and if topic about coding then send code example in precode tag and duration in minutes or hours  .Send Data in JSON format example output like this
+        {
+        Chapter_Name:"",
+        Duration:"",
+        about:"",
+        topics:[
+        {
+        id:1,
+        title:"",
+        description:"",
+        code:"<precode>""</precode>",
 
+        }
+        , {
+        id:2,
+        title:"",
+        description:"",
+        code:"<precode>""</precode>",
+        }
+        ]
+        } .`)
     return result?.response.text();
 
 }

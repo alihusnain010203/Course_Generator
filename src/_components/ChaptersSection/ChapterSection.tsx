@@ -19,7 +19,7 @@ const ChapterSection = ({ chapters = [] }:
                         <ChapterHolder
                             chapterHeading={chapter.Chapter_Name}
                             ChapterDesc={chapter.about}
-                            Duration={chapter.Duration + ' hours'}
+                            Duration={chapter.Duration.toString()}
                             index={index + 1}
                             key={index}
                         />

@@ -10,10 +10,17 @@ import CourseDetail from '@/_components/CourseDetail/CourseDetail'
 import ChapterSection from '@/_components/ChaptersSection/ChapterSection'
 import { Button } from '@/components/ui/button'
 import { generateChaptersContent } from '@/config/AIModel'
+import { CustomAlertDialog } from '@/_components/AlertDialog/AlertDialog'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 const page = () => {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const router = useRouter();
+  const [courseLoading, setCourseLoading] = useState(true);
   const { user } = useUser();
   const [id, setId] = useState(pathname.replace("/create-course/", ""))
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<null | string>(null)
   // const [courseImg,setCourseImg]=useState<null|string>(null)
 
   const updateCourseImage = async (imgUrl: string) => {
@@ -40,14 +47,16 @@ const page = () => {
 
   const getCourse = async () => {
     // get data from drizzle ORM
+
     if (user?.primaryEmailAddress?.emailAddress) {
       const data = await db.select().from(CourseSchema).where(and(eq(CourseSchema.courseId, id), eq(
         CourseSchema.createdBy, user.primaryEmailAddress.emailAddress
       )));
       setCourse(data[0])
-      console.log(data[0])
+      setCourseLoading(false)
     } else {
       console.error("User email address is undefined");
+      setCourseLoading(false)
     }
 
   }
@@ -58,57 +67,112 @@ const page = () => {
 
 
   return (
-    <div className='flex justify-center items-center'>
-      <div className='mt-10 flex flex-col gap-[20px] px-7 md:px-20 lg:px-44 w-full max-w-[1280px]'>
-        <h2 className='text-center font-bold text-2xl text-black'>Course Layout</h2>
-        <BasicCourseInfo
+    <div className='flex justify-center items-center w-full min-h-[100vh]'>
+      {
+        courseLoading ?
+          <Image src={"/loading.gif"} alt="loading" width={100} height={100} />
+          : <div className='mt-10 flex flex-col gap-[20px] px-7 md:px-20 lg:px-44 w-full max-w-[1280px] mb-3'>
+            <h2 className='text-center font-bold text-2xl text-black'>Course Layout</h2>
 
-          name={course?.name}
-          category={course?.category}
+            <BasicCourseInfo
 
-          description={course?.description}
-          updateCourse={updateCourseImage}
-          UserProfileImage={user?.imageUrl!}
-        />
-        <CourseDetail
-          level={course?.level}
-          duration={course?.duration}
-          noOfChapters={course?.noOfChapters}
-          referencedVideo={course?.referencedVideo}
-        />
-        {course?.courseOutput &&
-        <>
-          <ChapterSection
-            chapters={JSON.parse(course.courseOutput).Chapters}
-          />
-        
-        <Button className='bg-primary'
-         onClick={()=>{
-          let chapters=JSON.parse(course.courseOutput).Chapters;
-          if(chapters){
-            // loop over each chapter and store in array
-            let chaptersContent:any[]=[]
-            chapters.map(async(chapter:any,index:any)=>{
-              const result =await generateChaptersContent(
-                chapter.Course_Name,
-                
-                chapter.about,
-                chapter.Duration,
-                course.name
-              )
-              console.log(result)
-              chaptersContent.push(result)
-            })
-            // console.log(chaptersContent)
+              name={course?.name}
+              category={course?.category}
 
-          }
-         }}
-        >
-          Finish Course Setup
-        </Button></>
-}
+              description={course?.description}
+              updateCourse={updateCourseImage}
+              UserProfileImage={user?.imageUrl!}
+            />
+            <CourseDetail
+              level={course?.level}
+              duration={course?.duration}
+              noOfChapters={course?.noOfChapters}
+              referencedVideo={course?.referencedVideo}
+            />
+            {course?.courseOutput &&
+              <>
+                <ChapterSection
+                  chapters={JSON.parse(course.courseOutput).Chapters}
+                />
 
-      </div>
+                <Button className='bg-primary'
+                  onClick={async () => {
+                    setLoading(true);
+
+                    try {
+                      if (!course.courseOutput) {
+                        throw new Error("Course data is missing.");
+                      }
+
+                      let chapters;
+                      try {
+                        chapters = JSON.parse(course.courseOutput).Chapters;
+                      } catch (parseError) {
+                        throw new Error("Invalid JSON format.");
+                      }
+
+                      if (chapters) {
+                        let chaptersContent: any[] = [];
+
+                        for (const chapter of chapters) {
+                          try {
+                            const result = await generateChaptersContent(
+                              chapter.Course_Name,
+                              chapter.about,
+                              chapter.Duration,
+                              course.name
+                            );
+
+                            const getVideoLink = await fetch(
+                              `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${chapter.Chapter_Name}+${course.name}&key=${process.env.NEXT_PUBLIC_YOUTUBE}&videoDuration=medium`
+                            );
+                            const videoData = await getVideoLink.json();
+
+                            const parsedResult = JSON.parse(result);
+
+                            const completeChapter = {
+                              ...parsedResult,
+                              videoLink: "https://www.youtube.com/watch?v=" + videoData.items[0].id.videoId
+                            };
+
+                            console.log(completeChapter);
+                            chaptersContent.push(completeChapter);
+                          } catch (error) {
+                            console.error('Error generating chapter content:', error);
+                            setError("Something Went Wrong. Try Again");
+                          }
+                        }
+
+                        await db.update(CourseSchema).set({
+                          Chapters: JSON.stringify(chaptersContent)
+                        }).where(and(
+                          eq(CourseSchema.courseId, id),
+                          eq(CourseSchema.createdBy, user?.primaryEmailAddress?.emailAddress || '')
+                        ));
+
+                        router.replace("/completed");
+                      }
+                    } catch (error) {
+                      console.error(error);
+                      setError(String(error) || "Something went wrong.");
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+
+                >
+                  Finish Course Setup
+                </Button>
+                {error &&
+                  <p className='text-xl text-red-400'>{error}</p>}
+                <CustomAlertDialog loading={loading} text="Wait AI Generating Chapter Content For You" />
+              </>
+            }
+
+          </div>
+      }
+
+
     </div>
   )
 }

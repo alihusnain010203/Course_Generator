@@ -39,7 +39,7 @@ const Sidebar = () => {
                 <div className='flex flex-col gap-4'>
 
                     {Links.map((link, index) => (
-                        <Link href={link.path}>
+                        <Link href={link.path} key={+link+index}>
                             <div key={index} className={`flex items-center gap-4 p-2 ${activeTab === link?.path ? "bg-gray-300 text-primary" : "bg-white text-gray-500"} rounded-md hover:bg-gray-100`}>
                                 {link.icon}
                                 <span>{link.heading}</span>

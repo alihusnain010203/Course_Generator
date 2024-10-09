@@ -16,4 +16,5 @@ export const CourseSchema = pgTable('CourseSchema', {
     userName: varchar('userName').notNull(),
     userEmail: varchar('userEmail').notNull(),
     courseImage: varchar('CoureImage').notNull().default(""),
+    Chapters:text('Chapters').notNull().default(""),
 });
