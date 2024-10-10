@@ -10,6 +10,7 @@ if (!stripeSecretKey) {
 const stripe = new Stripe(stripeSecretKey);
 
 export async function POST(req:NextRequest) {
+const body=await req.text();
   const sig = req.headers.get('stripe-signature') || '';
   const webhookSecret = process.env.NEXT_PUBLIC_WEBHOOK;
   if (!webhookSecret) {
@@ -23,7 +24,7 @@ export async function POST(req:NextRequest) {
       console.error('Stripe signature is missing.');
       return NextResponse.json({ error: 'Webhook error' }, { status: 400 });
     }
-    event = stripe.webhooks.constructEvent((await req.text()).toString(), sig, webhookSecret);
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err) {
     console.error(`Webhook signature verification failed.`, err);
     return NextResponse.json({ error: 'Webhook error' }, { status: 400 });
