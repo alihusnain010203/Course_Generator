@@ -9,7 +9,13 @@ if (!stripeSecretKey) {
 }
 const stripe = new Stripe(stripeSecretKey);
 
-export async function POST(req:NextRequest) {
+export const config = {
+  api: {
+    bodyParser: false, // Disable Next.js body parsing
+  },
+};
+
+export async function POST(req: NextRequest) {
   const sig = req.headers.get('stripe-signature') || '';
   const webhookSecret = process.env.NEXT_PUBLIC_WEBHOOK;
   if (!webhookSecret) {
@@ -18,14 +24,22 @@ export async function POST(req:NextRequest) {
 
   let event;
 
-  try {
-    if (!sig) {
-      console.error('Stripe signature is missing.');
-      return NextResponse.json({ error: 'Webhook error' }, { status: 400 });
+  // Buffer function to capture raw request body
+//   @ts-ignore
+  async function buffer(readable) {
+    const chunks = [];
+    for await (const chunk of readable) {
+      chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
     }
-    event = stripe.webhooks.constructEvent(await req.text(), sig, webhookSecret);
+    return Buffer.concat(chunks);
+  }
+
+  try {
+    const buf = await buffer(req.body); // Capture raw body as buffer
+    event = stripe.webhooks.constructEvent(buf, sig, webhookSecret); // Verify signature
   } catch (err) {
-    console.error(`Webhook signature verification failed.`, err);
+    // @ts-ignore
+    console.error(`Webhook signature verification failed.`, err.message);
     return NextResponse.json({ error: 'Webhook error' }, { status: 400 });
   }
 
@@ -42,17 +56,14 @@ export async function POST(req:NextRequest) {
     const expiryDate = metadata.dateAfterMonth;
     const amount = session.amount_total?.toString() || '';
 
-    const res = await db.insert(TransactionSchema).values({
+    try {
+      const res = await db.insert(TransactionSchema).values({
         //@ts-ignore
         email,
-        supscription_date:date,
-        expiry_date:expiryDate,
+        supscription_date: date,
+        expiry_date: expiryDate,
         amount,
-    })
-
-   
-    try {
-     
+      });
     } catch (error) {
       console.error("Error storing transaction:", error);
     }
