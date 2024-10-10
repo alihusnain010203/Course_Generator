@@ -18,3 +18,12 @@ export const CourseSchema = pgTable('CourseSchema', {
     courseImage: varchar('CoureImage').notNull().default(""),
     Chapters:text('Chapters').notNull().default(""),
 });
+
+export const Transaction = pgSchema("TransactionSchema");
+export const TransactionSchema = pgTable('TransactionSchema', {
+    id: serial('id').primaryKey(),
+    email: varchar('email').notNull(),
+    supscription_date: varchar('supscription_date').notNull(),
+    expiry_date: varchar('expiry_date').notNull(),
+    amount: varchar('amount').notNull(),
+});
