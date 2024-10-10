@@ -9,37 +9,27 @@ if (!stripeSecretKey) {
 }
 const stripe = new Stripe(stripeSecretKey);
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable Next.js body parsing
-  },
-};
-
-export async function POST(req: NextRequest) {
+export async function POST(req:NextRequest) {  console.log("Webhook called");
+    console.log("req.headers", req.headers);
   const sig = req.headers.get('stripe-signature') || '';
   const webhookSecret = process.env.NEXT_PUBLIC_WEBHOOK;
+
+  
+  console.log("sig", sig);
   if (!webhookSecret) {
     throw new Error("Webhook secret is not defined");
   }
 
   let event;
 
-  // Buffer function to capture raw request body
-//   @ts-ignore
-  async function buffer(readable) {
-    const chunks = [];
-    for await (const chunk of readable) {
-      chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
-    }
-    return Buffer.concat(chunks);
-  }
-
   try {
-    const buf = await buffer(req.body); // Capture raw body as buffer
-    event = stripe.webhooks.constructEvent(buf, sig, webhookSecret); // Verify signature
+    if (!sig) {
+      console.error('Stripe signature is missing.');
+      return NextResponse.json({ error: 'Webhook error' }, { status: 400 });
+    }
+    event = stripe.webhooks.constructEvent(await req.text(), sig, webhookSecret);
   } catch (err) {
-    // @ts-ignore
-    console.error(`Webhook signature verification failed.`, err.message);
+    console.error(`Webhook signature verification failed.`, err);
     return NextResponse.json({ error: 'Webhook error' }, { status: 400 });
   }
 
@@ -56,14 +46,17 @@ export async function POST(req: NextRequest) {
     const expiryDate = metadata.dateAfterMonth;
     const amount = session.amount_total?.toString() || '';
 
-    try {
-      const res = await db.insert(TransactionSchema).values({
+    const res = await db.insert(TransactionSchema).values({
         //@ts-ignore
         email,
-        supscription_date: date,
-        expiry_date: expiryDate,
+        supscription_date:date,
+        expiry_date:expiryDate,
         amount,
-      });
+    })
+
+   
+    try {
+     
     } catch (error) {
       console.error("Error storing transaction:", error);
     }
