@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { db } from "@/config/db/db";
 import { TransactionSchema } from "@/config/db/schemas/TransactionScema";
+import { eq } from "drizzle-orm";
 
 const stripeSecretKey = process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY;
 if (!stripeSecretKey) {
@@ -43,13 +44,24 @@ const body=await req.text();
     const expiryDate = metadata.dateAfterMonth;
     const amount = session.amount_total?.toString() || '';
 
-    const res = await db.insert(TransactionSchema).values({
-        //@ts-ignore
-        email,
-        supscription_date:date,
-        expiry_date:expiryDate,
+    const existingTransaction = await db.select().from(TransactionSchema).where(eq(TransactionSchema.email,email));
+
+    if (existingTransaction) {
+      await db.update(TransactionSchema).set({
+        supscription_date: date,
+        expiry_date: expiryDate,
         amount,
-    })
+      }).where(
+        eq(TransactionSchema.email,email)
+      );
+    } else {
+      await db.insert(TransactionSchema).values({
+        email,
+        supscription_date: date,
+        expiry_date: expiryDate,
+        amount,
+      });
+    }
 
    
     try {

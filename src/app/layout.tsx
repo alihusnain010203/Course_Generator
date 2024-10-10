@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import {Montserrat}from "next/font/google"
+import {Roboto_Slab}from "next/font/google"
 import "./globals.css";
 import { ClerkProvider, GoogleOneTap} from "@clerk/nextjs";
 
@@ -15,7 +15,7 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-const montserrat=Montserrat({
+const montserrat=Roboto_Slab({
   subsets: ['latin'],  // Choose the appropriate subsets (e.g., latin, latin-ext)
   weight: ['400', '600', '700', '800'],  // Choose the appropriate weights (e.g., 400, 600, 700, 800)
 })
