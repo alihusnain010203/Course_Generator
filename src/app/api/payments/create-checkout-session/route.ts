@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
             metadata: { date, email,dateAfterMonth: new Date(new Date(date).setMonth(new Date(date).getMonth() + 1)).toISOString() },
             
             mode: "payment",
-            success_url: `http://localhost:3000/`,
-            cancel_url: `http://localhost:3000/`,
+            success_url: `https://course-generator-beta.vercel.app/`,
+            cancel_url: `https://course-generator-beta.vercel.app/`,
         });
 
         return NextResponse.json({ sessionId: session.id });
