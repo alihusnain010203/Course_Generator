@@ -16,10 +16,12 @@ const CourseSection = () => {
             setCourses(res);
             setLoading(false);
         }
+
+
     }
     const handleDelete = async (id: string) => {
         if (user && user.primaryEmailAddress) {
-            await db.delete(CourseSchema).where(and(eq(CourseSchema.courseId, id),eq(CourseSchema.createdBy, user.primaryEmailAddress.emailAddress)));
+            await db.delete(CourseSchema).where(and(eq(CourseSchema.courseId, id), eq(CourseSchema.createdBy, user.primaryEmailAddress.emailAddress)));
             getCourses();
         }
         return true
@@ -34,18 +36,25 @@ const CourseSection = () => {
             </> :
             <div className='p-2'>
                 <h1 className='text-2xl font-bold'>Courses</h1>
-                <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                <div className='flex gap-3 flex-wrap justify-evenly'>
                     {
-                        courses  &&courses.length>0 && courses.map((course, index) => (
-                            <CourseCard
-                                key={index}
-                                ImgUrl={course.CoureImage}
-                                CourseName={course.name}
-                                CourseDescription={course.description}
-                                courseId={course.courseId}
-                                handleDelete={handleDelete}
-                            />
-                        ))
+                        courses && courses.length > 0 ? courses.map((course, index) => (
+                           
+                                <CourseCard
+                                    key={index}
+                                    ImgUrl={course.CoureImage}
+                                    CourseName={course.name}
+                                    CourseDescription={course.description}
+                                    createdBy={course.createdBy}
+                                    courseId={course.courseId}
+                                    handleDelete={handleDelete}
+                                    userEmailAddress={user?.primaryEmailAddress?.emailAddress}
+                                />
+                              
+                        )):
+                        <div className='text-center w-full'>
+                            <h1 className='text-2xl font-bold'>No Courses Found</h1>
+                        </div>
                     }
                 </div>
             </div>
