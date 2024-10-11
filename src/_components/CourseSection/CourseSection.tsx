@@ -14,6 +14,7 @@ const CourseSection = () => {
         if (user && user.primaryEmailAddress) {
             const res = await db.select().from(CourseSchema).where(eq(CourseSchema.createdBy, user.primaryEmailAddress.emailAddress));
             setCourses(res);
+        console.log(res)
             setLoading(false);
         }
 
@@ -42,13 +43,15 @@ const CourseSection = () => {
                            
                                 <CourseCard
                                     key={index}
-                                    ImgUrl={course.CoureImage}
+                                    ImgUrl={course.courseImage}
                                     CourseName={course.name}
                                     CourseDescription={course.description}
                                     createdBy={course.createdBy}
                                     courseId={course.courseId}
                                     handleDelete={handleDelete}
                                     userEmailAddress={user?.primaryEmailAddress?.emailAddress}
+                                    category={course.category}
+                                    // course={course}
                                 />
                               
                         )):
