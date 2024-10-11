@@ -1,5 +1,6 @@
 "use client";
 
+import { AccordionDemo } from '@/_components/ChapterAcordian/ChapterAccordian';
 import CourseDetail from '@/_components/CourseDetail/CourseDetail';
 import Header from '@/_components/DashboardHeader/DashboardHeader';
 import { db } from '@/config/db/db';
@@ -11,71 +12,56 @@ import { useEffect, useState } from 'react';
 
 const ViewCourse = () => {
   const [course, setCourse] = useState<null | any>(null);
-  const [chapters, setChapters] = useState<any[]|null>(null);
+  const [chapters, setChapters] = useState<any[] | null>(null);
   const id = String(useParams().courseId);
 
-  const getCourse= async () => {
+  const getCourse = async () => {
     const res = await db.select().from(CourseSchema).where(eq(CourseSchema.courseId, id));
     setCourse(res[0]);
     setChapters(JSON.parse(res[0].Chapters))
-
-
-    
-
-
-
-
-
-  }
+}
 
   useEffect(() => {
     getCourse()
 
   }, []);
-  useEffect(() => {
-    console.log(chapters)
-
-  },[])
 
   if (!course) return <div>Loading...</div>;
 
   return (
     <div>
-        <Header/>
+      <Header />
 
-        <div className='w-full flex justify-center items-center'>
-            <div className='max-w-[1280px] w-full gap-3 flex flex-col mt-6 justify-center items-center '>
-                <h1 className='text-2xl font-bold'>{course.name}</h1> 
-                <p className='text-gray-500 p-3 text-center '>
-                    {course.description}
-                </p>
-                <Image src={course.courseImage||"/book.png"} alt='course' className='w-[90%] md:w-[40%] ' width={1280} height={720} />
-                <div className='w-[90%] md:w-[80%]'>
-                <CourseDetail
-                    level={course.level}
-                    duration={course.duration}
-                    noOfChapters={course.noOfChapters}
-                    referencedVideo={course.referencedVideo}
-                />
-                </div>
-                {/* Chapters */}
-                <div className='w-[90%] md:w-[80%]'>
-                    <h1 className='text-2xl font-bold'>Chapters</h1>
-                    <div className='flex flex-col gap-3'>
-                        {
-                            chapters?.map((chapter: any, index: number) => (
-                                <div key={index} className='flex gap-3'>
-                                    <p className='text-lg font-semibold'>{index + 1}. </p>
-                                    <p className='text-lg font-semibold'>{chapter.Chapter_Name}</p>
-                                </div>
-                            ))
-                        }
-                    </div>
-                    </div>
+      <div className='w-full flex justify-center items-center'>
+        <div className='max-w-[1280px] w-full gap-3 flex flex-col mt-6 justify-center items-center '>
+          <h1 className='text-2xl font-bold'>{course.name}</h1>
+          <p className='text-gray-500 p-3 text-center '>
+            {course.description}
+          </p>
+          <Image src={course.courseImage || "/book.png"} alt='course' className='w-[90%] md:w-[40%] ' width={1280} height={720} />
+          <div className='w-[90%] md:w-[80%]'>
+            <CourseDetail
+              level={course.level}
+              duration={course.duration}
+              noOfChapters={course.noOfChapters}
+              referencedVideo={course.referencedVideo}
+            />
+          </div>
+          {/* Chapters */}
+          <div className='w-[90%] md:w-[80%]'>
+            <h1 className='text-2xl font-bold'>Chapters</h1>
+            <div className='flex flex-col gap-3'>
+              {
+                chapters?.map((chapter: any, index: number) => (
+                  <AccordionDemo key={index} chapter={chapter} />
+                ))
+              }
             </div>
-
+          </div>
         </div>
-        
+
+      </div>
+
     </div>
   )
 };
