@@ -69,6 +69,7 @@ const CourseSection = () => {
                                     courseId={course.courseId}
                                     handleDelete={handleDelete}
                                     userEmailAddress={user?.primaryEmailAddress?.emailAddress}
+                                    category={course.category}
 
                                 />
                             </>
