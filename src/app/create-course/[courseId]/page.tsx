@@ -128,22 +128,19 @@ const page = () => {
                               `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${chapter.Chapter_Name}+${course.name}&key=${process.env.NEXT_PUBLIC_YOUTUBE}&videoDuration=medium`
                             );
                             const videoData = await getVideoLink.json();
-                            console.log("result" + result);
+                  
                             
                             const parsedResult = JSON.parse(JSON.stringify(result));
-                            console.log("parse" + parsedResult);
+         
                             
-                            // Generate the embedded video link
+                          
                             const embedVideoLink = "https://www.youtube.com/embed/" + videoData.items[0].id.videoId;
                             
                             const completeChapter = {
                               parsedResult: parsedResult,
-                              videoLink: embedVideoLink, // Use embed link for video
+                              videoLink: embedVideoLink, 
                             };
-                            
-                            console.log("completeChapter", completeChapter);
-                            
-                            // console.log(completeChapter);
+
                             chaptersContent.push(completeChapter);
                           } catch (error) {
                             console.error('Error generating chapter content:', error);

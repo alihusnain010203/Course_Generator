@@ -56,6 +56,7 @@ const ViewCourse = () => {
             <ViewPageChapters id={id}/>
           </div>
           {/* Back to dashboard */}
+          {/* Button */}
           <Link href='/dashboard' className='mb-2'>
             <Button className='bg-primary '>Back to Dashboard</Button>
           </Link>
