@@ -14,9 +14,6 @@ export async function POST(req: NextRequest) {
 
     const amount = 500;
     const currency = "usd";
-    console.log("date", date);
-    console.log("email", email);
-    console.log("After 1 month", new Date(new Date(date).setMonth(new Date(date).getMonth() + 1)).toISOString());
 
     try {
         const session = await stripe.checkout.sessions.create({

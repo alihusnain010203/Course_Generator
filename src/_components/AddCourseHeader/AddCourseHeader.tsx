@@ -18,12 +18,10 @@ const AddCourseHeader = () => {
     const checkUserIsPro = async () => {
         if (user?.primaryEmailAddress?.emailAddress) {
             try {
-                console.log(user.primaryEmailAddress.emailAddress);
 
                 const check = await db.select().from(TransactionSchema).where(
                     eq(TransactionSchema.email, user.primaryEmailAddress.emailAddress)
                 );
-                console.log(check);
                 if (check.length > 0 && check[0].expiry_date > new Date().toISOString()) {
                     router.push("/create-course")
                     return;

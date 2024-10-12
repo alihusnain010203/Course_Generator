@@ -31,7 +31,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
     // course
 }) => {
     const [deleting, setDeleting] = useState(false)
-    console.log(ImgUrl)
+  
     return (
         <div className='flex flex-col items-center p-1 shadow-lg border border-gray-200 w-[300px] min-h-[350px] rounded-lg relative py-3'>
 
@@ -53,13 +53,13 @@ const CourseCard: React.FC<CourseCardProps> = ({
 
                     }</p>
                 </p>
-              <Link
-  href={{
-    pathname: `/view-course/${courseId}`, // Encode to avoid URL issues
-  }}
->
-  <Button className='bg-primary'>View Course</Button>
-</Link>
+                <Link
+                    href={{
+                        pathname: `/view-course/${courseId}`, // Encode to avoid URL issues
+                    }}
+                >
+                    <Button className='bg-primary'>View Course</Button>
+                </Link>
                 {
                     userEmailAddress === createdBy && <Trash2
                         onClick={async () => {

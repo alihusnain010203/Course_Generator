@@ -41,7 +41,7 @@ const BasicCourseInfo: React.FC<BasicCourseInfoProps> = ({
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setUploadProgress(progress); // Update progress state
-        console.log('Upload is ' + progress + '% done');
+  
       },
       (error) => {
         console.error('Upload failed', error);
@@ -49,7 +49,7 @@ const BasicCourseInfo: React.FC<BasicCourseInfoProps> = ({
       async () => {
         // Get the download URL after the upload is complete
         const downloadURL = await getDownloadURL(storageRef);
-        console.log(downloadURL)
+    
         const update = updateCourse(downloadURL)
         if (update) {
           setImageUrl(downloadURL);
@@ -63,13 +63,12 @@ const BasicCourseInfo: React.FC<BasicCourseInfoProps> = ({
       }
     );
   };
-  console.log('Upload is ' + uploadProgress + '% done');
+
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // debugger
     if (e.target.files && e.target.files.length > 0) {
-      console.log(e.target)
-      console.log(e.target.files);
+    
 
       handleUpload(e.target.files[0]);
     }

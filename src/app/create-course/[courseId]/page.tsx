@@ -122,20 +122,23 @@ const page = () => {
                               chapter.Duration,
                               course.name
                             );
+                          
 
                             const getVideoLink = await fetch(
                               `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${chapter.Chapter_Name}+${course.name}&key=${process.env.NEXT_PUBLIC_YOUTUBE}&videoDuration=medium`
                             );
                             const videoData = await getVideoLink.json();
+                            console.log("result"+result);
 
-                            const parsedResult = JSON.parse(result);
-
+                            const parsedResult = JSON.parse(JSON.stringify(result));
+                            console.log("parse"+parsedResult);
+                            
                             const completeChapter = {
-                              ...parsedResult,
+                              parsedResult:parsedResult,
                               videoLink: "https://www.youtube.com/watch?v=" + videoData.items[0].id.videoId
                             };
 
-                            console.log(completeChapter);
+                            // console.log(completeChapter);
                             chaptersContent.push(completeChapter);
                           } catch (error) {
                             console.error('Error generating chapter content:', error);

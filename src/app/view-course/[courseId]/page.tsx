@@ -3,6 +3,7 @@
 import { AccordionDemo } from '@/_components/ChapterAcordian/ChapterAccordian';
 import CourseDetail from '@/_components/CourseDetail/CourseDetail';
 import Header from '@/_components/DashboardHeader/DashboardHeader';
+import ViewPageChapters from '@/_components/ViewPageChapters/ViewPageChapters';
 import { db } from '@/config/db/db';
 import { CourseSchema } from '@/config/db/schemas/CourseSchema';
 import { eq } from 'drizzle-orm';
@@ -50,13 +51,7 @@ const ViewCourse = () => {
           {/* Chapters */}
           <div className='w-[90%] md:w-[80%]'>
             <h1 className='text-2xl font-bold'>Chapters</h1>
-            <div className='flex flex-col gap-3'>
-              {
-                chapters?.map((chapter: any, index: number) => (
-                  <AccordionDemo key={index} chapter={chapter} />
-                ))
-              }
-            </div>
+            <ViewPageChapters id={id}/>
           </div>
         </div>
 

@@ -60,7 +60,8 @@ export async function generateChaptersContent(
     });
 
     const result = await chatSession.sendMessage(
-        `Generate a detail content about this topic ${chapterName} of this course ${courseName} and here is the description ${Description} with this Duration ${duration}.Chapter consist of arrays of topics with each topic having a name, description, and if topic about coding then send code example in precode tag and duration in minutes or hours  .Send Data in JSON format example output like this and Make sure JSON is valid
+        `Generate a detail content about this topic ${chapterName} of this course ${courseName} and here is the description ${Description} with this Duration ${duration}.Chapter consist of arrays of topics with each topic having a name, detail.Send Data in JSON format. Make sure JSON is valid
+        example output:
         {
         Chapter_Name:"",
         Duration:"",
@@ -69,17 +70,13 @@ export async function generateChaptersContent(
         {
         id:1,
         title:"",
-        description:"",
-        code:"",
+        detail:"",
+   
         }
-        , {
-        id:2,
-        title:"",
-        description:"",
-        code:"",
-        }
+        so on
         ]
-        } .`)
+        }.`)
+         console.log("Result",result?.response);
     return result?.response.text();
 
 }

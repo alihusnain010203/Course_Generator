@@ -14,7 +14,7 @@ const CourseSection = () => {
         if (user && user.primaryEmailAddress) {
             const res = await db.select().from(CourseSchema).where(eq(CourseSchema.createdBy, user.primaryEmailAddress.emailAddress));
             setCourses(res);
-        console.log(res)
+    
             setLoading(false);
         }
 
