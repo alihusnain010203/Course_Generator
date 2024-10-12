@@ -50,9 +50,9 @@ const CourseSection = () => {
     }, [user])
     return (
         loading
-            ? <>
+            ? <div className='flex justify-center mt-4'>
                 <Image src="/loading.gif" alt="loading" width={100} height={100} />
-            </> :
+            </div> :
             <div className='p-2'>
                 <h1 className='text-2xl font-bold'>Others Courses</h1>
                 <p className='text-gray-400'>{totalCourses} Courses</p>

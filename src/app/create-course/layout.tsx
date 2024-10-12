@@ -4,7 +4,7 @@ import React from 'react'
 
 const CreateCourseLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div>
+        <div >
             <Header />
             {children}
         </div>

@@ -8,6 +8,7 @@ import { useState } from "react";
   
   export function AccordionDemo({chapter}:{chapter:any}) {
     const [parsedResult, setParsedResult] = useState<any>(JSON.parse(chapter.parsedResult));
+    console.log(chapter.videoLink)
 
     return (
       <Accordion type="single" collapsible className="w-full">
@@ -21,14 +22,16 @@ import { useState } from "react";
             </p>
           </AccordionTrigger>
           <AccordionContent>
-            
+            <div className="flex justify-center items-center">
+            <iframe src={chapter.videoLink} className="w-[80%] md:h-[70vh]" ></iframe>
+            </div>
             {
                 parsedResult.topics.map((topic:any,index:number)=>{
                     return(
                         <div className="flex flex-col gap-4">
                             <h1 className=" text-xl font-bold">{topic.title}</h1>
                             <p className="text-gray-400 text-xs">
-                                {topic.detail}
+                                {topic.explanation}
                             </p>
                         </div>
                     )
