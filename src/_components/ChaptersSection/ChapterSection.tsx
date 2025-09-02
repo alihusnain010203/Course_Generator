@@ -5,20 +5,18 @@ import React from 'react'
 
 
 const ChapterSection = ({ chapters = [] }:
-    { chapters?: { Chapter_Name: string, about: string, Duration: number }[] }
+    { chapters?: { Chapter_Name: string, About: string, Duration: number }[] }
 ) => {
     const [chap, setChapters] = React.useState(chapters)
     return (
         <div className='mb-2'>
             <h1 className='text-xl font-semibold'>Chapters</h1>
             {
-                chap.map((chapter:
-                    { Chapter_Name: string, about: string, Duration: number }
-                    , index: number) => {
+                chap.map((chapter: { Chapter_Name: string, About: string, Duration: number }, index: number) => {
                     return (
                         <ChapterHolder
                             chapterHeading={chapter.Chapter_Name}
-                            ChapterDesc={chapter.about}
+                            ChapterDesc={chapter.About}
                             Duration={chapter.Duration.toString()}
                             index={index + 1}
                             key={index}

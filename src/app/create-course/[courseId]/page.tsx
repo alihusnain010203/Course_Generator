@@ -117,8 +117,8 @@ const page = () => {
                         for (const chapter of chapters) {
                           try {
                             const result = await generateChaptersContent(
-                              chapter.Course_Name,
-                              chapter.about,
+                              chapter.Chapter_Name,
+                              chapter.About,
                               chapter.Duration,
                               course.name
                             );
